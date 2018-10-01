@@ -1,0 +1,17 @@
+{
+    "name": "jerome/quete_simple_mvc",
+    "description": "quete 2",
+    "authors": [
+        {
+            "name": "Jeromevig",
+            "email": "jer.vignerot@gmail.com"
+        }
+    ],
+    "require": {},
+
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    }
+}
