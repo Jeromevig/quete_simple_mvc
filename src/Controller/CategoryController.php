@@ -9,7 +9,7 @@ class CategoryController
     public function index(){
         $categoryManager = new CategoryManager();
         $cats = $categoryManager->selectAllCategories();
-        require __DIR__ . '/../View/category.php';
+        require __DIR__ . '/../View/category.html.twig';
     }
     /**
      * Call view to display on Category
@@ -18,6 +18,6 @@ class CategoryController
     public function show(int $id){
         $categoryManager = new CategoryManager();
         $cat = $categoryManager->selectOneCategory($id);
-        require __DIR__ . '/../View/showCategory.php';
+        require __DIR__ . '/../View/showCategory.html.twig';
     }
 }
