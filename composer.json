@@ -1,0 +1,13 @@
+{
+    "name": "user/quete_simple_mvc",
+    "require": {
+        "nikic/fast-route": "^1.3",
+        "twig/twig": "^2.5"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    }
+}
