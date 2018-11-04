@@ -1,11 +1,11 @@
 <?php
-// routing.php
+
 $routes = [
     'Item' => [ // Controller
-        ['index', '/items', 'GET'], // action, url, HTTP method
-        ['show', '/item/{id}', 'GET'], // action, url, HTTP method
+        ['index', '/', 'GET'], // action, url, method
+        ['add', '/item/add', ['GET', 'POST']], // action, url, method
+        ['edit', '/item/edit/{id:\d+}', ['GET', 'POST']], // action, url, method
+        ['show', '/item/{id:\d+}', 'GET'], // action, url, method
+        ['delete', '/item/delete/{id:\d+}', 'GET'], // action, url, method
     ],
-    'Category' => [
-        ['index', '/categories', 'GET'],
-        ['show', '/category/{id}', 'GET']
-    ],
+];

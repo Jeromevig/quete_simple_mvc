@@ -1,34 +1,91 @@
 <?php
 
 namespace Controller;
+use Model\Item;
 use Model\ItemManager;
-//use View\View;
-use Twig_Loader_Filesystem;
-use Twig_Environment;
-
-
-class ItemController{
-
-    private $twig;
-
-    public function __construct(){
-        $loader = new Twig_Loader_Filesystem(__DIR__ . '/../View');
-        $this->twig = new Twig_Environment($loader);
+/**
+ * Class ItemController
+ *
+ */
+class ItemController extends AbstractController
+{
+    /**
+     * Display item listing
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function index()
+    {
+        $itemManager = new ItemManager($this->pdo);
+        $items = $itemManager->selectAll();
+        return $this->twig->render('Item/index.html.twig', ['items' => $items]);
     }
-
-    public function index(){
-        $itemManager = new ItemManager();
-        $items = $itemManager->selectAllItems();
-
-        return $this->twig->render('item.html.twig', ['items' => $items]);
-
-        //$view = new View();
-        //return $view->render(__DIR__ . '/../View/item.html.twig',['items'=>$items]);
+    /**
+     * Display item informations specified by $id
+     *
+     * @param int $id
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function show(int $id)
+    {
+        $itemManager = new ItemManager($this->pdo);
+        $item = $itemManager->selectOneById($id);
+        return $this->twig->render('Item/show.html.twig', ['item' => $item]);
     }
-
-    public function show(int $id){
-        $itemManager = new ItemManager();
-        $item = $itemManager->selectOneItem($id);
-        require __DIR__ . '/../View/showItem.html.twig';
+    /**
+     * Display item edition page specified by $id
+     *
+     * @param int $id
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function edit(int $id): string
+    {
+        $itemManager = new ItemManager($this->pdo);
+        $item = $itemManager->selectOneById($id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $item->setTitle($_POST['title']);
+            $itemManager->update($item);
+        }
+        return $this->twig->render('Item/edit.html.twig', ['item' => $item]);
+    }
+    /**
+     * Display item creation page
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function add()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $itemManager = new ItemManager($this->pdo);
+            $item = new Item();
+            $item->setTitle($_POST['title']);
+            if (false !== $id = $itemManager->insert($item)) {
+                header('Location:/item/' . $id);
+            }
+        }
+        return $this->twig->render('Item/add.html.twig');
+    }
+    /**
+     * Handle item deletion
+     *
+     * @param int $id
+     */
+    public function delete(int $id)
+    {
+        $itemManager = new ItemManager($this->pdo);
+        $itemManager->delete($id);
+        header('Location:/');
     }
 }
